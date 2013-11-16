@@ -1,93 +1,39 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>navigator.connection.type Example</title>
 
-<head>
-<title>Twitter API</title>
-<meta name="viewport" content="width=device-width">
-<style>
-p {
-	background-color: #d0d0d0;
-	margin-bottom:10px;
-}
-p img {
-	margin-right: 10px;
-	float: left;
-}
-</style>
-<script src="jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="cordova-2.2.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova-2.2.0.js"></script>
+    <script type="text/javascript" charset="utf-8">
 
-<script>
-document.addEventListener("deviceready", init, false);
+    // Wait for Cordova to load
+    // 
+    document.addEventListener("deviceready", onDeviceReady, false);
 
-function init() {
-	document.addEventListener("online", toggleCon, false);
-	document.addEventListener("offline", toggleCon, false);
+    // Cordova is loaded and it is now safe to make calls Cordova methods
+    //
+    function onDeviceReady() {
+        checkConnection();
+    }
 
-	if(navigator.network.connection.type == Connection.NONE) {
-		navigator.notification.alert("Sorry, you are offline.", function() {}, "Offline!");
-	} else {
-		setupButtonHandler();
-	}
+    function checkConnection() {
+        var networkState = navigator.connection.type;
 
-}
+        var states = {};
+        states[Connection.UNKNOWN]  = 'Unknown connection';
+        states[Connection.ETHERNET] = 'Ethernet connection';
+        states[Connection.WIFI]     = 'WiFi connection';
+        states[Connection.CELL_2G]  = 'Cell 2G connection';
+        states[Connection.CELL_3G]  = 'Cell 3G connection';
+        states[Connection.CELL_4G]  = 'Cell 4G connection';
+        states[Connection.NONE]     = 'No network connection';
 
-function toggleCon(e) {
-	console.log("Called",e.type);
-	if(e.type == "offline") {
-		$("#searchBtn").off("touchstart").attr("disabled","disabled");
-		navigator.notification.alert("Sorry, you are offline.", function() {}, "Offline!");
-	} else {
-		$("#searchBtn").removeAttr("disabled");
-		navigator.notification.alert("Woot, you are back online.", function() {}, "Online!");
-		setupButtonHandler();
-	}
-}
+        alert('Connection type: ' + states[networkState]);
+    }
 
-function setupButtonHandler() {
-
-	$("#searchBtn").on("touchstart", function(e) {
-
-		//get the search term
-		var search = $("#search").val();
-		if(search == "") return;
-
-		//disable button while we search
-		$(this).attr("disabled","disabled");
-
-		$("#results").html("<i>Doing a search for "+search+"</i>");
-
-		//ok, hit the API
-		$.get("http://search.twitter.com/search.json", {"q":search}, function(res,code) {
-			if(res.results && res.results.length) {
-				var s = "<h2>Results</h2>";
-				for(var i=0, len=res.results.length; i<len; i++) {
-					var entry = res.results[i];
-					s += "<p><img src='"+entry.profile_image_url+"'>";
-					s += entry.from_user+"<br/>";
-					s += entry.created_at+"<br/>";
-					s += entry.text;
-					s += "</p>";
-				}
-				$("#results").html(s);
-				$("#searchBtn").removeAttr("disabled");
-			}
-		});
-
-	});
-};
-
-
-</script>
-</head>
-
-<body>
-
-<input type="text" id="search" placeholder="Enter Search Term"><br/>
-<button id="searchBtn">Search</button>
-
-<div id="results">
-</div>
-
-</body>
+    </script>
+  </head>
+  <body>
+    <p>A dialog box will report the network state.</p>
+  </body>
 </html>
