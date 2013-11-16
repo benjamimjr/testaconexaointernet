@@ -4,14 +4,14 @@
         id        = "br.com.benjax.Conexao"
         version   = "1.0.0">
 	
-	    <name>Conexão</name>
+	    <name>Conexão internet</name>
 
     <description>
-        Conexão
+        Conexão internet
     </description>
 
     <author href="http://benjax.com.br" email="brnjax@benjax.com.br">
-        Conexão Dev
+        Conexão internet Dev
     </author>
 
     <!--
